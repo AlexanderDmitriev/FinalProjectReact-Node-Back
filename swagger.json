@@ -1,0 +1,551 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "BooksReading Node.js43 Team9 - OpenAPI 1.0",
+    "description": "This is a sample BooksReading Server by  team9 goit-group-43 for  based on the OpenAPI 1.0 specification.  ",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://localhost:3000/api/"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Autorization and information about user"
+    },
+    {
+      "name": "Books",
+      "description": "Access to library of books"
+    },
+    {
+      "name": "Stats",
+      "description": "User's training statistics"
+    }
+  ],
+  "paths": {
+    "/users/signup": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Create new user",
+        "description": "Create new user",
+        "operationId": "createUser",
+        "requestBody": {
+          "description": "Create new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                  },
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "unknown@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "somepassword"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful registration"
+          },
+          "409": {
+            "description": "Email in use, need login"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/users/login": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Login user",
+        "description": "Login user",
+        "requestBody": {
+          "description": "Create new user",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "example": "unknown@mail.com"
+                  },
+                  "password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "somepassword"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful login",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "unknown@mail.com"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJiMDhmODZhZi0zNWRhLTQ4ZjItOGZ"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Invalid email or password"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/users/logout": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Logout user",
+        "description": "Logout user by token in headers Autorization",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "204": {
+            "description": "Logout success"
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/users/current": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Check current user",
+        "description": "Check current user by token in headers Autorization",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "201": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "unknown@mail.com"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not authorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/books": {
+      "get": {
+        "tags": ["Books"],
+        "summary": "User's books list",
+        "description": "Get all user's books",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "All books from user's library",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Book"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "post": {
+        "tags": ["Books"],
+        "summary": "Add book to user's library",
+        "description": "Add book to user's library",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Authorization",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Token provided current user"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Create new book",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "title": {
+                    "type": "string",
+                    "example": "The Light Fantastic"
+                  },
+                  "author": {
+                    "type": "string",
+                    "example": "Terry Pratchett"
+                  },
+                  "year": {
+                    "type": "string",
+                    "example": 1986
+                  },
+                  "pages": {
+                    "type": "string",
+                    "example": 560
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Book succesfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Book already in your library"
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/books/{bookId}": {
+      "patch": {
+        "tags": ["Books"],
+        "summary": "Update resume to the book",
+        "description": "Update resume to the book",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "bookId",
+            "schema": {
+              "type": "string"
+            },
+            "required": true,
+            "description": "Book's id"
+          }
+        ],
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Rating and commet for book",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "rating": {
+                    "type": "string",
+                    "enum": [1, 2, 3, 4, 5]
+                  },
+                  "comment": {
+                    "type": "string",
+                    "example": "Bad book"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Book's resume succesfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/training": {
+      "post": {
+        "tags": ["Stats"],
+        "summary": "Adding training plan",
+        "description": "Adding training plan",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Adding book's id to reading",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "books": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "example": "507f1f77bcf86cd799439011"
+                    }
+                  },
+                  "start": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "01-02-2022 20:19"
+                  },
+                  "end": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "01-02-2023 20:19"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful created training"
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/training/stats": {
+      "post": {
+        "tags": ["Stats"],
+        "summary": "Adding information about readed pages per day",
+        "description": "Adding information about readed pages per day",
+        "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "description": "Date and amount of pages",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "date": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "01-02-2022"
+                  },
+                  "pages": {
+                    "type": "string",
+                    "example": "100"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful add progress"
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      },
+      "get": {
+        "tags": ["Stats"],
+        "summary": "Get information about user's progress",
+        "description": "Get information about user's progress",
+        "security": [{ "Bearer": [] }],
+        "responses": {
+          "200": {
+            "description": "Successful",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Book"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not autorized"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Book": {
+        "type": "object",
+        "properties": {
+          "_id": {
+            "type": "string",
+            "example": "507f1f77bcf86cd799439011"
+          },
+          "title": {
+            "type": "string",
+            "example": "The Light Fantastic"
+          },
+          "author": {
+            "type": "string",
+            "example": "Terry Pratchett"
+          },
+          "year": {
+            "type": "string",
+            "example": 1986
+          },
+          "pages": {
+            "type": "string",
+            "example": 560
+          },
+          "status": {
+            "type": "string",
+            "enum": ["plan", "in progress", "finished"]
+          },
+          "resume": {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "string",
+                "enum": [1, 2, 3, 4, 5]
+              },
+              "comment": {
+                "type": "string",
+                "example": "Bad book"
+              }
+            }
+          }
+        }
+      },
+      "Stats": {
+        "type": "object",
+        "properties": {
+          "activeBooks": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "507f1f77bcf86cd799439011"
+            }
+          },
+          "start": {
+            "type": "string",
+            "format": "date-time",
+            "example": "01-02-2022 20:19"
+          },
+          "end": {
+            "type": "string",
+            "format": "date-time",
+            "example": "01-02-2023 20:19"
+          },
+          "statistic": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "date": {
+                  "type": "string",
+                  "format": "date-time",
+                  "example": "01-02-2023 20:19"
+                },
+                "pages": {
+                  "type": "string",
+                  "example": "100"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Bearer": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  }
+}
