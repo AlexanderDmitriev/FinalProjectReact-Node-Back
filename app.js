@@ -12,6 +12,7 @@ const authRouter = require('./routes/api/auth');
 /* const usersRouter = require("./routes/api/users"); */
 
 const booksRouter = require("./routes/api/books");
+const statsRouter = require("./routes/api/stats");
 
 // const statsRouter = require("./routes/api/stats");
 
@@ -23,13 +24,15 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static("public"))
 
 app.use('/api/auth', authRouter);
 /* app.use("/api/users", usersRouter); */
 
 app.use("/api/books", booksRouter);
+app.use("/api/training", statsRouter);
+
 
 // app.use("/api/stats", statsRouter);
 

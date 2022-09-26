@@ -13,4 +13,4 @@ const getStatistics = async (req, res) => {
     res.status(201).json(result);
 };
 
-module.exports = addTraining;
+module.exports = getStatistics;

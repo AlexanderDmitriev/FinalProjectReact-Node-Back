@@ -8,7 +8,7 @@ const statSchema = new Schema(
       active: [
         {
           book: {
-            type: mongoose.Schema.Types.ObjectId,
+            type: Schema.Types.ObjectId,
             ref: "Book",
           },
         },
@@ -35,7 +35,7 @@ const statSchema = new Schema(
       },
     ],
     owner: {
-      type: mongoose.Schema.Types.ObjectId,
+      type: Schema.Types.ObjectId,
       ref: "User",
     },
   },
