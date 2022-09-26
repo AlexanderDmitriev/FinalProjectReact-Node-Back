@@ -3,6 +3,7 @@ const Joi = require("joi");
 const { handleSchemaValidationErrors } = require("../helpers");
 
 const statusKind = ["plan", "in progress", "finished"];
+const ratingKind = ["1", "2", "3", "4", "5", null];
 
 const bookSchema = new Schema ({
     title: {
@@ -26,17 +27,17 @@ const bookSchema = new Schema ({
         enum: statusKind,
         default: "plan",
       },
-    //   resume: {
-    //     comment: {
-    //       type: String,
-    //       default: null,
-    //     },
-    //     rating: {
-    //       type: String,
-    //       enum: ["1", "2", "3", "4", "5"],
-    //       default: null,
-    //     },
-    //   },
+      resume: {
+        comment: {
+          type: String,
+          default: null,
+        },
+        rating: {
+          type: String,
+          enum: ratingKind,
+          default: null,
+        },
+      },
     //   owner: {
     //     type: Schema.Types.ObjectId,
     //     ref: "User",
@@ -55,9 +56,16 @@ const addSchema = Joi.object({
     status: Joi.string().valueOf(...statusKind),
   })
 
+  const updateResumeSchema = Joi.object({
+    // resume: Joi.object({
+      comment: Joi.string().required(),
+      rating: Joi.string().valueOf(...ratingKind)
+    // })
+  })
+
   const schemas = {
     addSchema,
-    
+    updateResumeSchema
   }
 
 const Book = model("book", bookSchema);
