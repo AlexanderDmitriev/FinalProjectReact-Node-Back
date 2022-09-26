@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 
-const { User } = require('../../models/model_user');
+const { User } = require('../../models/user');
 const { RequestError } = require('../../helpers/index');
 
 const signup = async (req, res) => {
