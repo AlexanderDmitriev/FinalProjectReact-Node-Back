@@ -8,7 +8,6 @@ const validationBody = schema => {
         }
         next();
     }
-
     return func;
 }
 
