@@ -8,6 +8,9 @@ const swaggerDocument = require('./swagger.json');
 
 dotenv.config();
 
+const booksRouter = require("./routes/api/books");
+const usersRouter = require("./routes/api/users");
+const statsRouter = require("./routes/api/stats");
 const app = express();
 const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 
@@ -16,6 +19,10 @@ app.use(cors());
 app.use(express.json());
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+
+app.use("/api/books", booksRouter);
+app.use("/api/users", usersRouter);
+app.use("/api/stats", statsRouter);
 
 app.use((req, res) => {
     res.status(404).json({ message: "Not found" });
@@ -27,7 +34,3 @@ app.use((req, res) => {
   });
   
 module.exports = app;
-
-// app.listen(3001, () => 
-//     console.log("Web-server success running")
-// )
