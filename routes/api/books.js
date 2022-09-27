@@ -15,7 +15,7 @@ router.get("/", ctrlWrapper(ctrl.getAll));
 router.post("/", validationBody(schemas.addSchema) , ctrlWrapper(ctrl.add));
 
 router.patch(
-    "/:bookId/resume",
+    "/:bookId",
     isValidId,
     validationBody(schemas.updateResumeSchema),
     ctrlWrapper(ctrl.updateResume)
