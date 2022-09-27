@@ -5,6 +5,7 @@ const { RequestError } = require("../../helpers");
 
 const addTraining = async (req, res) => {
   const {book, start, end} = req.body;
+  const { _id: userId } = req.user;
 
   if (book.length < 1) {
     throw RequestError(400, "Bad request");
@@ -21,7 +22,8 @@ const addTraining = async (req, res) => {
   const newTraining = {
     active: book,
     start,
-    end
+    end,
+    owner: userId
   };
 
   const result = Stat.create(newTraining);
