@@ -4,29 +4,53 @@ const { Stat } = require("../../models/stat");
 const { RequestError } = require("../../helpers");
 
 const addStatistics = async (req, res) => {
-//   const {book, start, end} = req.body;
+    const { _id: userId } = req.user;
+    const newDailyStats = req.body;
 
-//   if (book.length < 1) {
-//     throw RequestError(400, "Bad request");
-//   }
+    const oldStatistic = await Stat.findOne({owner: userId});
+    const booksId = oldStatistic.active;
+    const activeBooks = [];
 
-//   try {
-//     book.forEach(async (item) => {
-//       await Book.findByIdAndUpdate(item.id, { status: "in progress" });
-//     });
-//   } catch (err) {
-//     throw RequestError(500, err);
-//   }
+    booksId.forEach(async (item) => {
+              const book = await Book.findOne(item);
+              activeBooks.push(book)
+            });
+    
+    const totalPagesReaded = oldStatistic.statistic.reduce((acc, {pages}) => {
+        if(!pages) {
+            return acc;
+        }
+        return acc + pages;
+    },0) + newDailyStats.pages;
 
-//   const newTraining = {
-//     active: book,
-//     start,
-//     end
-//   };
+    
+    const planningPages = 0;
 
-//   const result = Stat.create(newTraining);
+    for(let i = 0; i < activeBooks.length; i += 1) {
+        
+        if((+activeBooks[i] + planningPages) > totalPagesReaded) {
+            break;
+        };
 
-//   res.status(201).json(result);
+        if (activeBooks.status === "in progress") {
+            activeBooks.status = "finished";
+            await Book.findByIdAndUpdate(activeBooks._id, { status: "finished"});
+        }
+    }
+
+    const finishedBooks = activeBooks.filter(book => book.status === "finished");
+
+    const isTrainingFinished = activeBooks.length === finishedBooks.length;
+
+    const {statistic} = oldStatistic.statistic.push(newDailyStats);
+
+    const result = await Stat.findOneAndUpdate({_id: oldStatistic._id},{statistic}, {new: true})
+
+    if (isTrainingFinished) {
+        result.message = "Training succesffuly end"
+    }
+
+    res.status(201).json(result);
 };
 
 module.exports = addStatistics;
