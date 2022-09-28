@@ -10,7 +10,6 @@ authorRegexp = /^[^ -]\D{1,50}$/;
 yearRegexp = /^[12]\d{3}$/;
 pagesRegexp = /^\d{1,4}$/;
 
-
 const bookSchema = new Schema ({
     title: {
         type: String,
@@ -69,6 +68,7 @@ const addSchema = Joi.object({
 
   const updateResumeSchema = Joi.object({
     comment: Joi.string().min(1).max(1000).required(),
+
     rating: Joi.string().valueOf(...ratingKind)
 })
 
