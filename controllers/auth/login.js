@@ -16,9 +16,7 @@ const login = async (req, res) => {
     if (!comparePassword) {
         throw RequestError(401, "Password wrong");
     }
-    // if(!user.verify) {
-    //     throw RequestError(403, "Email not verify");
-    // }
+
     const peyload = {
         id: user._id
     }

@@ -1,20 +1,18 @@
-const express = require ("express");
+const express = require("express");
+
+const path = require("path");
 
 const logger = require("morgan");
 const cors = require("cors");
-// const dotenv = require("dotenv");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-require('dotenv').config();
+// require('dotenv').config();
+require("dotenv").config({ path: path.join(__dirname, "./.env") });
 
 const authRouter = require('./routes/api/auth');
-/* const usersRouter = require("./routes/api/users"); */
-
 const booksRouter = require("./routes/api/books");
 const statsRouter = require("./routes/api/stats");
-
-// const statsRouter = require("./routes/api/stats");
 
 
 const app = express();
@@ -24,11 +22,13 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
-app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+// app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.static("public"))
 
 app.use('/api/auth', authRouter);
-/* app.use("/api/users", usersRouter); */
+app.use('/link', (req, res) => {
+      res.sendFile(path.join(__dirname, "./public/link.html"));
+    });
 
 app.use("/api/books", booksRouter);
 app.use("/api/training", statsRouter);
