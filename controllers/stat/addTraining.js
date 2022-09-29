@@ -4,6 +4,7 @@ const { Stat } = require("../../models/stat");
 const { RequestError } = require("../../helpers");
 
 const addTraining = async (req, res) => {
+  console.log(req.body);
   const {book, start, end} = req.body;
   const { _id: userId } = req.user;
 
@@ -13,21 +14,22 @@ const addTraining = async (req, res) => {
 
   try {
     book.forEach(async (item) => {
-      await Book.findByIdAndUpdate(item.id, { status: "in progress" });
+      await Book.findByIdAndUpdate(item, { status: "in progress" });
     });
   } catch (err) {
     throw RequestError(500, err);
   }
 
   const newTraining = {
-    active: book,
-    start,
-    end,
+    training: {
+      active: book,
+      start,
+      end
+    },
     owner: userId
   };
 
-  const result = Stat.create(newTraining);
-
+  const result = await Stat.create(newTraining);
   res.status(201).json(result);
 };
 
