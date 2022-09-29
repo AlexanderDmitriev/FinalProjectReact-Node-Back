@@ -7,21 +7,26 @@ const addStatistics = async (req, res) => {
     const { _id: userId } = req.user;
     const newDailyStats = req.body;
 
-    const oldStatistic = await Stat.findOne({owner: userId});
-    const booksId = oldStatistic.active;
+    const oldStatistic = await Stat.findOne({owner: userId, status: "in progress"});
+    const booksId = oldStatistic.training.active;
     const activeBooks = [];
 
-    booksId.forEach(async (item) => {
-              const book = await Book.findOne(item);
-              activeBooks.push(book)
+    await booksId.forEach(async (item) => {
+              const book = await Book.findById(item);
+              activeBooks.push(book);
+              console.log(book);
+              console.log("search done");
             });
     
     const totalPagesReaded = oldStatistic.statistic.reduce((acc, {pages}) => {
         if(!pages) {
             return acc;
         }
-        return acc + pages;
-    },0) + newDailyStats.pages;
+        console.log("total pages")
+        return acc + parseInt(pages);
+    },0) + parseInt(newDailyStats.pages);
+
+    console.log(totalPagesReaded)
 
     
     const planningPages = 0;
@@ -32,22 +37,27 @@ const addStatistics = async (req, res) => {
             break;
         };
 
-        if (activeBooks.status === "in progress") {
-            activeBooks.status = "finished";
-            await Book.findByIdAndUpdate(activeBooks._id, { status: "finished"});
-        }
-    }
+        if (activeBooks[i].status === "in progress") {
+            activeBooks[i].status = "finished";
+            await Book.findByIdAndUpdate(activeBooks[i]._id, { status: "finished"});
+        };
+    };
 
     const finishedBooks = activeBooks.filter(book => book.status === "finished");
 
+    console.log(finishedBooks)
+    console.log(activeBooks)
+
     const isTrainingFinished = activeBooks.length === finishedBooks.length;
 
-    const {statistic} = oldStatistic.statistic.push(newDailyStats);
+    oldStatistic.statistic.push(newDailyStats);
 
-    const result = await Stat.findOneAndUpdate({_id: oldStatistic._id},{statistic}, {new: true})
+    const result = await Stat.findOneAndUpdate({_id: oldStatistic._id},{statistic: oldStatistic.statistic}, {new: true})
 
     if (isTrainingFinished) {
-        result.message = "Training succesffuly end"
+        result.message = "Training succesffuly end";
+        await Stat.findOneAndUpdate({_id: oldStatistic._id},{status: "done"});
+        console.log("finish ???")
     }
 
     res.status(201).json(result);

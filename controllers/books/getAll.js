@@ -6,7 +6,9 @@ const getAll = async (req, res) => {
 
     const { _id: owner } = req.user;
     const result = await Book.find({ owner }, " -createdAt -updatedAt"
-    ).populate("owner", "email");
+    // ).populate("owner", "email");
+    );
+
     res.json(result);
 };
 
