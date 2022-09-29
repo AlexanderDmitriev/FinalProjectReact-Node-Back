@@ -1,17 +1,13 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleSchemaValidationErrors } = require("../helpers");
+const { boolean } = require("joi");
 
 const statSchema = new Schema(
   {
     training: {
       active: [
-        {
-          book: {
-            type: Schema.Types.ObjectId,
-            ref: "Book",
-          },
-        },
+        Schema.Types.ObjectId,        
       ],
       start: {
         type: Date,
@@ -38,6 +34,11 @@ const statSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    status: {
+      type: String,
+      enum: ["in progress", "done"],
+      default: "in progress"
+    }
   },
   { versionKey: false, timestamps: true }
 );
