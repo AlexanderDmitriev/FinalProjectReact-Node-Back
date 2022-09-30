@@ -2,6 +2,7 @@ const queryString = require('query-string');
 // npm install query-string
 const axios = require('axios');
 // npm install axios
+const { v4 } = require('uuid');
 
 const { User } = require('../../models/user');
 const bcrypt = require('bcryptjs');
@@ -48,7 +49,7 @@ const googleRedirect = async (req, res) => {
         },
     });
     console.log('3');
-
+    
     const userData = await axios({
         url: "https://www.googleapis.com/oauth2/v2/userinfo",
         method: "get",
@@ -58,21 +59,31 @@ const googleRedirect = async (req, res) => {
     });
     console.log(`userData.email ${userData.data.email}`);
     console.log(`userData.name ${userData.data.name}`);
-    
+    // GOOGLE END********************************************
+
+    // SINGUP *********************************************
     const googleEmail = userData.data.email;
     const googleName = userData.data.name;
     const email = googleEmail;
     const name = googleName
     // const checkUser = await User.findOne({ googleEmail });
-    // if (checkUser) {
-        
-        const password = "111111";
-        // const hashPassword = await bcrypt.hash(password, 10);
-        await User.create({ name, email, password });
-        console.log('4')
-    // }
 
     const user = await User.findOne({ email });
+    console.log('4/1')
+    if (user) {
+        console.log(`user: ${user.name} found!`)
+    }
+        
+    // const password = "111111";
+    const password = v4();
+   // const hashPassword = await bcrypt.hash(password, 10);
+    await User.create({ name, email, password });
+    console.log('4')
+    // }
+    //  ***************************************************
+
+    //  LOGIN *********************************************
+    // const user = await User.findOne({ email });
     console.log('user', user)
     
     const peyload = {
@@ -86,6 +97,7 @@ const googleRedirect = async (req, res) => {
         //     token,
         // });
     console.log('5');
+    //  ***************************************************
 
     return res.redirect(
         `${process.env.FRONTEND_URL}?email=${userData.data.email}&name=${userData.data.name}`
