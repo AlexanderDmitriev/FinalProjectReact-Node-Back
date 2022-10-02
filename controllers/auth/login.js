@@ -7,7 +7,8 @@ const { User } = require('../../models/user');
 const { SECRET_KEY } = process.env;
 
 const login = async (req, res) => {
-    const { email, password, } = req.body;
+    let { email, password, } = req.body;
+    email = email.toLowerCase();
     const user = await User.findOne({ email });
     if (!user) {
         throw RequestError(401, "Email not found");
