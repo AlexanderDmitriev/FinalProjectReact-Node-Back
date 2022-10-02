@@ -27,12 +27,10 @@ const googleAuth = async (req, res) => {
 };
 
 const googleRedirect = async (req, res) => {
-    // console.log('googleRedirect ');
     const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
     const urlObj = new URL(fullUrl);
     const urlParams = queryString.parse(urlObj.search);
     const code = urlParams.code;
-    // console.log(`code: ${code}`);
     const tokenData = await axios({
         url: `https://oauth2.googleapis.com/token`,
         method: "post",
@@ -49,8 +47,6 @@ const googleRedirect = async (req, res) => {
         method: "get",
         headers: { Authorization: `Bearer ${tokenData.data.access_token}`},
     });
-    // console.log(`userData.email ${userData.data.email}`);
-    // console.log(`userData.name ${userData.data.name}`);
     // GOOGLE END********************************************
 
     // SINGUP *********************************************
@@ -59,7 +55,6 @@ const googleRedirect = async (req, res) => {
     let user = await User.findOne({ email });
     if (!user) {
         console.log(`user not found!`)
-        // const password = "111111";
         const password = v4();
         const hashPassword = await bcrypt.hash(password, 10);
         user = await User.create({ name, email, password: hashPassword });
@@ -68,7 +63,6 @@ const googleRedirect = async (req, res) => {
     //  ***************************************************
 
     //  LOGIN *********************************************
-    // user = await User.findOne({ email });
     const peyload = { id: user._id };
     const token = jwt.sign(peyload, SECRET_KEY, { expiresIn: "24h" });
     await User.findByIdAndUpdate(user._id, { token });

@@ -7,7 +7,6 @@ const cors = require("cors");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-// require('dotenv').config();
 require("dotenv").config({ path: path.join(__dirname, "./.env") });
 
 const authRouter = require('./routes/api/auth');
@@ -30,7 +29,6 @@ app.use('/link', (req, res) => {
 });
 app.use("/api/books", booksRouter);
 app.use("/api/training", statsRouter);
-// app.use("/api/stats", statsRouter);
 
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
