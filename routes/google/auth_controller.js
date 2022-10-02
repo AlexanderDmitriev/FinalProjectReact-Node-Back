@@ -69,12 +69,13 @@ const googleRedirect = async (req, res) => {
     res.json({
         token,
         name: user.name,
+        email: user.email
     });
     console.log('Login is successful');
     //  ***************************************************
     // return res.redirect(
     //     `http://localhost:3001?email=${userData.data.email}`
-    //     // `http://localhost:3001/api/users/current/?token=${token}`
+    //     // `http://localhost:3001/?token=${token}`
     //     // `${process.env.FRONTEND_URL}?token=${token}`
     // )
 }
