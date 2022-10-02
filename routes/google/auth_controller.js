@@ -68,7 +68,7 @@ const googleRedirect = async (req, res) => {
     //  ***************************************************
 
     //  LOGIN *********************************************
-    user = await User.findOne({ email });;
+    user = await User.findOne({ email });
     const peyload = { id: user._id };
     const token = jwt.sign(peyload, SECRET_KEY, { expiresIn: "24h" });
     await User.findByIdAndUpdate(user._id, { token });

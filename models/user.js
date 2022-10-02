@@ -3,8 +3,8 @@ const Joi = require('joi');
 
 const { handleSchemaValidationErrors } = require("../helpers");
 
-const emailRegexp = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
-// const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
+// const emailRegexp = /^([a-z0-9_-]+\.)*[a-z0-9_-]+@[a-z0-9_-]+(\.[a-z0-9_-]+)*\.[a-z]{2,6}$/;
+const emailRegexp = /^[\w.]+@[\w]+.[\w]+$/;
 
 const userShema = new Schema({
   name: {
@@ -34,6 +34,7 @@ userShema.post("save", handleSchemaValidationErrors);
 // ** Joi schemas ***************************************
 const singupSchema = Joi.object({
   name: Joi.string().required(),
+  // email: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(), 
   repeat_password: Joi.string().required().valid(Joi.ref('password')),
