@@ -42,7 +42,7 @@ const singupSchema = Joi.object({
 })
 
 const loginSchema = Joi.object({
-  email: Joi.string().min(6).max(6).pattern(emailRegexp).required(),
+  email: Joi.string().min(6).max(63).pattern(emailRegexp).required(),
   password: Joi.string().min(6).required(),
 })
 
