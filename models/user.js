@@ -37,7 +37,7 @@ userShema.post("save", handleSchemaValidationErrors);
 const singupSchema = Joi.object({
   name: Joi.string().required(),
   email: Joi.string().pattern(emailRegexp).min(6).required(),
-  password: Joi.string().min(6).max(6).required(), 
+  password: Joi.string().min(6).max(63).required(), 
   repeat_password: Joi.string().required().valid(Joi.ref('password')),
 })
 
