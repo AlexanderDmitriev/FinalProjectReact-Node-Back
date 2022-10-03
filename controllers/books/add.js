@@ -4,7 +4,7 @@ const { RequestError } = require("../../helpers");
 const add = async(req, res) => {
     const {_id: owner} = req.user;
     const {author, title} = req.body;
-    const book = await Book.findOne({author, title});
+    const book = await Book.findOne({author, title, owner});
     if (book) {
         throw RequestError(409, "This book already exsist in your library")
     }

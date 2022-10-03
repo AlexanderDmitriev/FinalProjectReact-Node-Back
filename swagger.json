@@ -56,6 +56,11 @@
                     "type": "string",
                     "format": "password",
                     "example": "somepassword"
+                  },
+                  "repeat_password": {
+                    "type": "string",
+                    "format": "password",
+                    "example": "somepassword"
                   }
                 }
               }
@@ -65,7 +70,28 @@
         },
         "responses": {
           "201": {
-            "description": "Successful registration"
+            "description": "Successful registration",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "name": {
+                      "type": "string",
+                      "example": "John Doe"
+                    },
+                    "email": {
+                      "type": "string",
+                      "example": "unknown@mail.com"
+                    },
+                    "token": {
+                      "type": "string",
+                      "example": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VySWQiOiJiMDhmODZhZi0zNWRhLTQ4ZjItOGZ"
+                    }
+                  }
+                }
+              }
+            }
           },
           "409": {
             "description": "Email in use, need login"
@@ -315,7 +341,7 @@
                 "properties": {
                   "rating": {
                     "type": "string",
-                    "enum": [1, 2, 3, 4, 5]
+                    "enum": ["1", "2", "3", "4", "5"]
                   },
                   "comment": {
                     "type": "string",
@@ -369,13 +395,13 @@
                   },
                   "start": {
                     "type": "string",
-                    "format": "date-time",
-                    "example": "01-02-2022 20:19"
+                    "format": "date",
+                    "example": "2022-10-01"
                   },
                   "end": {
                     "type": "string",
-                    "format": "date-time",
-                    "example": "01-02-2023 20:19"
+                    "format": "date",
+                    "example": "2022-10-01"
                   }
                 }
               }
@@ -412,7 +438,11 @@
                   "date": {
                     "type": "string",
                     "format": "date",
-                    "example": "01-02-2022"
+                    "example": "2022-10-01"
+                  },
+                  "time": {
+                    "type": "string",
+                    "example": "10:59:01"
                   },
                   "pages": {
                     "type": "string",
@@ -495,7 +525,7 @@
             "properties": {
               "rating": {
                 "type": "string",
-                "enum": [1, 2, 3, 4, 5]
+                "enum": ["1", "2", "3", "4", "5"]
               },
               "comment": {
                 "type": "string",
@@ -517,13 +547,13 @@
           },
           "start": {
             "type": "string",
-            "format": "date-time",
-            "example": "01-02-2022 20:19"
+            "format": "date",
+            "example": "2022-10-01"
           },
           "end": {
             "type": "string",
-            "format": "date-time",
-            "example": "01-02-2023 20:19"
+            "format": "date",
+            "example": "2022-10-01"
           },
           "statistic": {
             "type": "array",
@@ -532,8 +562,12 @@
               "properties": {
                 "date": {
                   "type": "string",
-                  "format": "date-time",
-                  "example": "01-02-2023 20:19"
+                  "format": "date",
+                  "example": "2022-10-01"
+                },
+                "time": {
+                  "type": "string",
+                  "example": "10:59:01"
                 },
                 "pages": {
                   "type": "string",
