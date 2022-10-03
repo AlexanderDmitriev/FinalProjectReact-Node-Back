@@ -1,11 +1,13 @@
-const express = require ("express");
+const express = require("express");
+
+const path = require("path");
 
 const logger = require("morgan");
 const cors = require("cors");
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
-require('dotenv').config();
+require("dotenv").config({ path: path.join(__dirname, "./.env") });
 
 const authRouter = require('./routes/api/auth');
 const booksRouter = require("./routes/api/books");
@@ -19,9 +21,15 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
+app.use(express.static("public"))
+
 app.use('/api/users', authRouter);
+app.use('/link', (req, res) => {
+  res.sendFile(path.join(__dirname, "./public/link.html"));
+});
 app.use("/api/books", booksRouter);
 app.use("/api/training", statsRouter);
+
 app.use('/', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {

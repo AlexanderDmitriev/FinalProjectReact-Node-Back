@@ -1,7 +1,6 @@
 const { Schema, model } = require("mongoose");
 const Joi = require("joi");
 const { handleSchemaValidationErrors } = require("../helpers");
-const { boolean } = require("joi");
 
 const statSchema = new Schema(
   {
@@ -10,19 +9,23 @@ const statSchema = new Schema(
         Schema.Types.ObjectId,        
       ],
       start: {
-        type: Date,
+        type: String,
         default: null,
       },
       end: {
-        type: Date,
+        type: String,
         default: null,
       },
     },
     statistic: [
       {
         date: {
-          type: Date,
+          type: String,
           default: null,
+        },
+        time: {
+          type: String,
+          default: null
         },
         pages: {
           type: String,
@@ -47,12 +50,13 @@ statSchema.post("save", handleSchemaValidationErrors);
 
 const addTrainSchema = Joi.object({
   book: Joi.array().items(Joi.string().length(24)).min(1).required(),
-  start: Joi.date().timestamp().required(),
-  end: Joi.date().timestamp().required(),
+  start: Joi.string().length(10).required(),
+  end: Joi.string().length(10).required(),
 });
 
 const addDailyStatsSchema = Joi.object({
-  date: Joi.date().timestamp().required(),
+  date: Joi.string().length(10).required(),
+  time: Joi.string().length(8).required(),
   pages: Joi.string().pattern(/\d/).required(),
 });
 
