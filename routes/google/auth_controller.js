@@ -1,7 +1,6 @@
 const queryString = require('query-string');
 const axios = require('axios');
 const { v4 } = require('uuid');
-
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -54,11 +53,10 @@ const googleRedirect = async (req, res) => {
     const name = userData.data.name;
     let user = await User.findOne({ email });
     if (!user) {
-        console.log(`user not found!`)
         const password = v4();
         const hashPassword = await bcrypt.hash(password, 10);
         user = await User.create({ name, email, password: hashPassword });
-        console.log(`User was created`)
+        // console.log(`User was created`)
     }
     //  ***************************************************
 
@@ -66,19 +64,12 @@ const googleRedirect = async (req, res) => {
     const peyload = { id: user._id };
     const token = jwt.sign(peyload, SECRET_KEY, { expiresIn: "24h" });
     await User.findByIdAndUpdate(user._id, { token });
-    res.json({
-        token,
-        name: user.name,
-    });
-    console.log('Login is successful');
+    // console.log('Login is successful');
     //  ***************************************************
-    // return res.redirect(
-    //     `http://localhost:3001?email=${userData.data.email}`
-    //     // `http://localhost:3001/api/users/current/?token=${token}`
-    //     // `${process.env.FRONTEND_URL}?token=${token}`
-    // )
+    return res.redirect(
+        `http://localhost:3001/?token=${token}&name=${name}&email=${email}`
+    )
 }
-
 module.exports = {
     googleAuth,
     googleRedirect,
