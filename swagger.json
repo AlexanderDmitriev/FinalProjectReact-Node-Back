@@ -2,12 +2,12 @@
   "openapi": "3.0.0",
   "info": {
     "title": "BooksReading Node.js43 Team9 - OpenAPI 1.0",
-    "description": "This is a sample BooksReading Server by  team9 goit-group-43 for  based on the OpenAPI 1.0 specification.  ",
-    "version": "1.0.0"
+    "description": "This is a sample BooksReading Server by  team9 goit-group-43 for  based on the OpenAPI 3.0 specification.  ",
+    "version": "1.0.1"
   },
   "servers": [
-    {
-      "url": "https://book-reader-app-43.herokuapp.com/api",
+    { 
+      "url": "https://book-reader-43-back.herokuapp.com/api",
       "description": "Deployment server"
     },
     {
@@ -386,7 +386,7 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "books": {
+                  "book": {
                     "type": "array",
                     "items": {
                       "type": "string",
