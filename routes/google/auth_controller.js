@@ -67,7 +67,7 @@ const googleRedirect = async (req, res) => {
     // console.log('Login is successful');
     //  ***************************************************
     return res.redirect(
-        `http://localhost:3001/?token=${token}&name=${name}&email=${email}`
+        `http://${process.env.FRONT_URL}?token=${token}&name=${name}&email=${email}`
     )
 }
 module.exports = {
