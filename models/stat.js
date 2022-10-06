@@ -57,7 +57,7 @@ const addTrainSchema = Joi.object({
 const addDailyStatsSchema = Joi.object({
   date: Joi.string().length(10).required(),
   time: Joi.string().length(8).required(),
-  pages: Joi.string().pattern(/\d/).required(),
+  pages: Joi.string().pattern(/^[0-9]+$/).required().min(1).max(3),
 });
 
 const schemas = {
