@@ -8,7 +8,7 @@ const ratingKind = ["1", "2", "3", "4", "5", null];
 titleRegexp = /^[^ -].{1,50}$/;
 authorRegexp = /^[^ -]\D{1,50}$/;
 yearRegexp = /^[12]\d{3}$/;
-pagesRegexp = /^\d{1,4}$/;
+pagesRegexp = /^[^0\D]\d{0,3}$/;
 
 const bookSchema = new Schema ({
     title: {
