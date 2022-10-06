@@ -24,6 +24,7 @@ const bookSchema = new Schema ({
       year: {
         type: String,
         match: yearRegexp,
+        default: null
       },
       pages: {
         type: String,
@@ -61,7 +62,7 @@ bookSchema.post("save", handleSchemaValidationErrors);
 const addSchema = Joi.object({
     title: Joi.string().pattern(titleRegexp).required(),
     author: Joi.string().pattern(authorRegexp).required(),
-    year: Joi.string().pattern(yearRegexp),
+    year: Joi.string().empty('').pattern(yearRegexp),
     pages: Joi.string().pattern(pagesRegexp).required(),
     status: Joi.string().valueOf(...statusKind),
   })
