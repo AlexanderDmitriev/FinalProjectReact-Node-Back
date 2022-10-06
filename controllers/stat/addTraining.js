@@ -7,6 +7,12 @@ const addTraining = async (req, res) => {
   const {book: booksId, start, end} = req.body;
   const { _id: userId } = req.user;
 
+  // const activeTraining = await Stat.findOne({owner: userId, status: "in progress"});
+
+  // if(activeTraining) {
+  //   throw RequestError(400, "User already have unfinished training");
+  // }
+
   if (booksId.length < 1) {
     throw RequestError(400, "Bad request");
   }
