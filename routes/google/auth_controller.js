@@ -19,12 +19,14 @@ const googleAuth = async (req, res) => {
     access_type: "offline",
     prompt: "consent",
   });
+  // console.log("1111111111111111111111");
   return res.redirect(
     `https://accounts.google.com/o/oauth2/v2/auth?${stringifiedParams}`
   );
 };
 
 const googleRedirect = async (req, res) => {
+  // console.log("22222222222222222222");
   const fullUrl = `${req.protocol}://${req.get("host")}${req.originalUrl}`;
   const urlObj = new URL(fullUrl);
   const urlParams = queryString.parse(urlObj.search);
@@ -64,7 +66,7 @@ const googleRedirect = async (req, res) => {
   await User.findByIdAndUpdate(user._id, { token });
   //  ***************************************************
   return res.redirect(
-    `http://${process.env.FRONT_URL}/?token=${token}&name=${name}&email=${email}`
+    `${process.env.FRONT_URL}/?token=${token}&name=${name}&email=${email}`
   );
 };
 module.exports = {
